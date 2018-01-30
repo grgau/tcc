@@ -34,6 +34,9 @@ while(True):
         if (recent != last):
             recent = last
             print(recent)
+    #elif (alert_note == 'SSL::Invalid_Server_Cert'):
+
+    #elif (alert_note == 'Intel::Notice'):
 
 alerts = GetNote()
 alert_note = alerts['hits']['hits'][0]['_source']['note']
