@@ -1,6 +1,8 @@
 from .elasticsearchConnect import *
 
 def SearchNotes(client):
+    from ..dates import (start_time, end_time)
+    print(start_time)
     response = client.search (
         index = "bro-*",
         scroll = '20m', #Tempo de scroll (Tempo maximo que um scroll irá demorar para processar a quantidade de resultados dele)
@@ -11,7 +13,7 @@ def SearchNotes(client):
                 "bool": {
                     "must": [
                         {"exists": {"field": "note"}},
-                        {"range": {"@timestamp": {"from": "now-15m", "to": "now"}}}
+                        {"range": {"@timestamp": {"from": start_time, "to": end_time}}}
                     ]
                 }
             },

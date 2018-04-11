@@ -1,7 +1,6 @@
-#!/usr/bin/python3
-from getElasticsearch.netflowGetFlowsBro import GetFlows
-from getElasticsearch.utils import *
-from csvCreate import createCsv
+from .getElasticsearch.netflowGetFlowsBro import GetFlows
+from .utils import *
+from .csvCreate import createCsv
 
 def BuildFlows():
     ascan_raw, pscan_raw, spass_raw = GetFlows()
@@ -47,6 +46,7 @@ def BuildFlows():
         del pkts_list[:]
         del dst_ports_list[:]
         del tcp_flags_list[:]
+
 
     # Append de atividades de port_scan
     for i in range (0,len(pscan_raw)):
@@ -97,8 +97,6 @@ def BuildFlows():
         del tcp_flags_list[:]
 
 
-
     del sec_incident[1::2]
-    createCsv(sec_incident) # Cria csv de incidentes
-
-    #return sec_incident
+    
+    return sec_incident

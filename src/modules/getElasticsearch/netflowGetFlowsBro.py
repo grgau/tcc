@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 import time
 from .broGetNotes import GetNotes
 from .netflowSearchFlows import SearchAllFlows
