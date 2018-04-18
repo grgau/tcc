@@ -6,6 +6,10 @@ def GetNotes():
     port_scan = []
     ssh_passguess = []
     fin_storm = []
+
+    if not hits_total:
+        return (address_scan, port_scan, ssh_passguess, fin_storm)
+
     for hit in hits_total:
         if hit['_source']['note'] == 'Scan::Address_Scan':
             time_m, time_s = hit['_source']['msg'].split(' ', 11)[11].split('m', 2)[0] , hit['_source']['msg'].split(' ', 11)[11].split('m', 2)[1].replace("s", "")

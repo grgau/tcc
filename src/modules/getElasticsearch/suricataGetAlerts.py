@@ -5,6 +5,10 @@ def GetAlerts():
     p2p_bittorrentping = []
     p2p_clientutorrent = []
     mssql_badtraffic = []
+
+    if not hits_total:
+        return (ssh_scan, gpl_scan, p2p_bittorrentping, p2p_clientutorrent, mssql_badtraffic)
+
     for hit in hits_total:
         if hit['_source']['alert']['signature'] == 'ET SCAN Potential SSH Scan':
             #pp.pprint(hit['_source'])

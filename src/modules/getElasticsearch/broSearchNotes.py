@@ -1,8 +1,8 @@
+# coding=utf-8
 from .elasticsearchConnect import *
 
 def SearchNotes(client):
     from ..dates import (start_time, end_time)
-    print(start_time)
     response = client.search (
         index = "bro-*",
         scroll = '20m', #Tempo de scroll (Tempo maximo que um scroll irá demorar para processar a quantidade de resultados dele)
