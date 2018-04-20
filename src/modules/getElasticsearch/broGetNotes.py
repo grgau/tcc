@@ -1,7 +1,7 @@
-from .broSearchNotes import SearchAllNotes
+from .searchNotesAlerts import SearchAllNotesAlerts
 
 def GetNotes():
-    hits_total = SearchAllNotes()
+    hits_total = SearchAllNotesAlerts("bro-*", "note")
     address_scan = []
     port_scan = []
     ssh_passguess = []

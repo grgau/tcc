@@ -1,0 +1,8 @@
+elasticsearch
+requests
+time
+pandas
+csv
+itertools
+numpy
+datetime

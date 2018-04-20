@@ -1,3 +1,7 @@
+import pandas as pd
+from .suricataGetAlerts import GetAlerts
+from .netflowSearchFlows import SearchAllFlows
+
 def GetFlows():
     ssh_scan, gpl_scan, p2p_bittorrentping, p2p_clientutorrent, mssql_badtraffic = GetAlerts()
     ssh_scan_flow = []

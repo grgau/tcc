@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from modules.dataBuildFlowsBro import BuildFlows
+from modules.dataBuildFlows import BuildFlows
 from modules.csvCreate import createCsv
 import sys, getopt
 

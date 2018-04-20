@@ -1,5 +1,6 @@
 import numpy
 from datetime import datetime
+from .getElasticsearch.netflowGetFlows import GetFlows
 
 def calcDuration(duration_list): # Calcula a duração entre o fluxo mais antigo e o mais recente
 
@@ -97,3 +98,43 @@ def countTCPFlags(tcp_flags_list):
         ack += convertTCPFlags(flag)[1]
         urg += convertTCPFlags(flag)[0]
     return urg, ack, psh, rst, syn, fin
+
+def GetFlowsLabel():
+
+    ascan_raw, pscan_raw, spass_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw = GetFlows()
+    
+    for index in ascan_raw:
+        if index is not None:
+            index.insert(len(index), 1)
+
+    for index in pscan_raw:
+        if index is not None:
+            index.insert(len(index), 2)
+
+    for index in spass_raw:
+        if index is not None:
+            index.insert(len(index), 3)
+
+    #FIN_STORM
+
+    for index in sshscan_raw:
+        if index is not None:
+            index.insert(len(index), 5)
+
+    for index in gplscan_raw:
+        if index is not None:
+            index.insert(len(index), 6)
+
+    for index in p2pbittorrentping_raw:
+        if index is not None:
+            index.insert(len(index), 7)
+
+    for index in p2pclientutorrent_raw:
+        if index is not None:
+            index.insert(len(index), 8)
+
+    for index in mssqlbadtraffic_raw:
+        if index is not None:
+            index.insert(len(index), 9)
+
+    return (ascan_raw, pscan_raw, spass_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw)

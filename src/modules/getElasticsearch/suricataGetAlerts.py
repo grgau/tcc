@@ -1,5 +1,7 @@
+from .searchNotesAlerts import SearchAllNotesAlerts
+
 def GetAlerts():
-    hits_total = SearchAllAlerts()
+    hits_total = SearchAllNotesAlerts("suricata-*", "alert.signature")
     ssh_scan = []
     gpl_scan = []
     p2p_bittorrentping = []
