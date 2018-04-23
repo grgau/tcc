@@ -101,8 +101,8 @@ def countTCPFlags(tcp_flags_list):
 
 def GetFlowsLabel():
 
-    ascan_raw, pscan_raw, spass_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw = GetFlows()
-    
+    ascan_raw, pscan_raw, spass_raw, sshscan_raw, fstorm_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, legittraffic_raw = GetFlows()
+
     for index in ascan_raw:
         if index is not None:
             index.insert(len(index), 1)
@@ -115,7 +115,9 @@ def GetFlowsLabel():
         if index is not None:
             index.insert(len(index), 3)
 
-    #FIN_STORM
+    for index in fstorm_raw:
+        if index is not None:
+            index.insert(len(index), 4)
 
     for index in sshscan_raw:
         if index is not None:
@@ -137,4 +139,8 @@ def GetFlowsLabel():
         if index is not None:
             index.insert(len(index), 9)
 
-    return (ascan_raw, pscan_raw, spass_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw)
+    for index in legittraffic_raw:
+        if index is not None:
+            index.insert(len(index), 10)
+
+    return (ascan_raw, pscan_raw, spass_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, legittraffic_raw)

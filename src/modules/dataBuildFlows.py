@@ -5,13 +5,12 @@ import itertools
 import pprint
 
 def BuildFlows():
-    from .dates import (start_time, end_time)
+    ascan_raw, pscan_raw, spass_raw, sshscan_raw, fstorm_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, legittraffic_raw = GetFlowsLabel()
 
-    ascan_raw, pscan_raw, spass_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw = GetFlowsLabel()
-    #all_flows = SearchAllFlows('.*', '.*', '.*', '.*', '.*', start_time, end_time)
-
-    total_incidents = list(itertools.chain(ascan_raw, pscan_raw, spass_raw, sshscan_raw, gplscan_raw,p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw))
+    total_incidents = list(itertools.chain(ascan_raw, pscan_raw, spass_raw, sshscan_raw, fstorm_raw, gplscan_raw,p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw))
     total_incidents = [x for x in total_incidents if x is not None] # Removendo valores None
+
+    ## Remover de legittraffic_raw os mesmos fluxos que existem em total_incidents
 
     sec_incident = []  # O lindissimo, falou tudo. O maravilhoso usado para classificar
                         # Seus campos maravilhosos:
