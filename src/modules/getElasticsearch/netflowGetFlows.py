@@ -3,9 +3,11 @@ import pandas as pd
 from .suricataGetAlerts import GetAlerts
 from .broGetNotes import GetNotes
 from .netflowSearchFlows import SearchAllFlows
+from itertools import groupby
+from operator import itemgetter
 
 def GetFlows():
-    from .dates import (start_time, end_time)
+    from ..dates import (start_time, end_time)
 
     a_scan, p_scan, s_passguess, f_storm = GetNotes()
     ssh_scan, gpl_scan, p2p_bittorrentping, p2p_clientutorrent, mssql_badtraffic = GetAlerts()
@@ -95,13 +97,13 @@ def GetFlows():
             gte = pd.to_datetime(scan[0]) - pd.DateOffset(minutes=1) # valor minimo
             mssql_badtraffic_flow.append(SearchAllFlows(scan[1], scan[2], scan[3], scan[4], scan[5], gte, lte))
 
-    for flow in range(0, len(all_flows)):
-        if all_flows[flow]['_source']['netflow']['src_addr'] == '200.145.216.136' or all_flows[flow]['_source']['netflow']['dst_addr'] == '200.145.216.136':
+    for i in range(0, len(all_flows)):
+        if all_flows[i]['_source']['netflow']['src_addr'] == '200.145.216.136' or all_flows[i]['_source']['netflow']['dst_addr'] == '200.145.216.136':
             None
         else:
-            for flow_next in range(flow+1, len(all_flows)):
-
-            legit_traffic_flow.append()
-
+            grouper = itemgetter('src_addr'(1), 'src_port'(1), 'protocol'(1))
+            print(grouper)
+            for key, items in groupby(sorted(all_flows, key = grouper), grouper):
+                legit_traffic_flow.append(list(items))
 
     return (address_scan_flow, port_scan_flow, ssh_passguess_flow, ssh_scan_flow, gpl_scan_flow, p2p_bittorrentping_flow, p2p_clientutorrent_flow, mssql_badtraffic_flow, legit_traffic_flow)
