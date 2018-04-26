@@ -5,6 +5,7 @@ from .broGetNotes import GetNotes
 from .netflowSearchFlows import SearchAllFlows
 from itertools import groupby
 from operator import itemgetter
+from ..utils import groupFlows
 
 def GetFlows():
     from ..dates import (start_time, end_time)
@@ -97,13 +98,6 @@ def GetFlows():
             gte = pd.to_datetime(scan[0]) - pd.DateOffset(minutes=1) # valor minimo
             mssql_badtraffic_flow.append(SearchAllFlows(scan[1], scan[2], scan[3], scan[4], scan[5], gte, lte))
 
-    for i in range(0, len(all_flows)):
-        if all_flows[i]['_source']['netflow']['src_addr'] == '200.145.216.136' or all_flows[i]['_source']['netflow']['dst_addr'] == '200.145.216.136':
-            None
-        else:
-            grouper = itemgetter('src_addr'(1), 'src_port'(1), 'protocol'(1))
-            print(grouper)
-            for key, items in groupby(sorted(all_flows, key = grouper), grouper):
-                legit_traffic_flow.append(list(items))
+    all_traffic_flow = groupFlows(10)
 
-    return (address_scan_flow, port_scan_flow, ssh_passguess_flow, ssh_scan_flow, gpl_scan_flow, p2p_bittorrentping_flow, p2p_clientutorrent_flow, mssql_badtraffic_flow, legit_traffic_flow)
+    return (address_scan_flow, port_scan_flow, ssh_passguess_flow, ssh_scan_flow, gpl_scan_flow, p2p_bittorrentping_flow, p2p_clientutorrent_flow, mssql_badtraffic_flow, all_traffic_flow)

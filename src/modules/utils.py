@@ -143,4 +143,35 @@ def GetFlowsLabel():
         if index is not None:
             index.insert(len(index), 10)
 
-    return (ascan_raw, pscan_raw, spass_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, legittraffic_raw)
+    return (ascan_raw, pscan_raw, spass_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, all_traffic_raw)
+
+def groupFlows(window):
+    from .dates import (start_time, end_time)
+    allflows = []
+    start_time = pd.to_datetime(start_time)
+    end_time = pd.to_datetime(end_time)
+    start_interval = start_time
+    end_interval = pd.to_datetime(start_interval) + pd.DateOffset(minutes=window)
+    end_interval = pd.to_datetime(end_interval) - pd.DateOffset(seconds=1)
+
+    while (end_interval <= end_time):
+        all_flows = list(SearchAllFlows('.*', '.*', '.*', '.*', '.*', start_interval, end_interval))
+        print(start_interval, end_interval)
+
+        for flow in all_flows[:]:
+            if flow['_source']['netflow']['src_addr'] == '200.145.216.136' or flow['_source']['netflow']['dst_addr'] == '200.145.216.136':
+                all_flows.remove(flow)
+
+        for key, items in itertools.groupby(sorted(all_flows, key=lambda item: (item["_source"]["netflow"]["src_addr"], item["_source"]["netflow"]["src_port"], item["_source"]["netflow"]["protocol"])), key=lambda item: (item["_source"]["netflow"]["src_addr"], item["_source"]["netflow"]["src_port"], item["_source"]["netflow"]["protocol"])):
+            allflows.append(list(items))
+
+        start_interval = pd.to_datetime(start_interval) + pd.DateOffset(minutes=window)
+        end_interval = pd.to_datetime(end_interval) + pd.DateOffset(minutes=window)
+
+    return allflows
+
+def removeIncidents(legittraffic, total_incidents):
+
+    # Remover 
+
+    return legittraffic

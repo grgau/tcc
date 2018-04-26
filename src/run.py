@@ -28,7 +28,7 @@ def main(argv):
 
     incidents = BuildFlows()
 
-    createCsv(incidents, modules.dates.start_time, modules.dates.end_time) # Cria csv de incidentes
+    #createCsv(incidents, modules.dates.start_time, modules.dates.end_time) # Cria csv de incidentes
 
     return True
 

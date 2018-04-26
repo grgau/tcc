@@ -1,3 +1,5 @@
+# Imnprimir bro_incidents, alltraffic_raw, total_incidents e verificar ligitmidade dos resultados
+
 from .getElasticsearch.netflowGetFlows import GetFlows
 from .utils import *
 from .csvCreate import createCsv
@@ -5,12 +7,21 @@ import itertools
 import pprint
 
 def BuildFlows():
-    ascan_raw, pscan_raw, spass_raw, sshscan_raw, fstorm_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, legittraffic_raw = GetFlowsLabel()
+    ascan_raw, pscan_raw, spass_raw, sshscan_raw, fstorm_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, alltraffic_raw = GetFlowsLabel()
+    alltraffic_raw = [x for x in alltraffic_raw if x is not None] # Removendo valores None
 
-    total_incidents = list(itertools.chain(ascan_raw, pscan_raw, spass_raw, sshscan_raw, fstorm_raw, gplscan_raw,p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw))
+    bro_incident = list(itertools.chain(ascan_raw, pscan_raw, spass_raw, sshscan_raw, fstorm_raw))
+    bro_incident = [x for x in bro_incident if x is not None] # Removendo valores None
+    del bro_incident[1::2]  # Removendo valores de bro notes duplicados
+
+    total_incidents = list(itertools.chain(bro_incident, gplscan_raw,p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw))
     total_incidents = [x for x in total_incidents if x is not None] # Removendo valores None
 
-    ## Remover de legittraffic_raw os mesmos fluxos que existem em total_incidents
+
+    # Removendo de alltraffic_raw os mesmos fluxos que existem em total_incidents
+    #legittraffic = removeIncidents(alltraffic_raw, total_incidents)
+
+    total_flows = list(itertools.chain(legittraffic, total_incidents)
 
     sec_incident = []  # O lindissimo, falou tudo. O maravilhoso usado para classificar
                         # Seus campos maravilhosos:
@@ -28,29 +39,27 @@ def BuildFlows():
     tcp_flags_list = []
 
     # Append de atividades de address_scan
-    for i in range (0,len(total_incidents)):
-        for j in range(0, len(total_incidents[i])-1): #Para cada um dos flows
-            duration_list.append(total_incidents[i][j]['_source']['netflow']['first_switched'])
-            pkts_list.append(total_incidents[i][j]['_source']['netflow']['in_pkts'])
-            bytes_list.append(total_incidents[i][j]['_source']['netflow']['in_bytes'])
-            dst_ports_list.append(total_incidents[i][j]['_source']['netflow']['dst_port'])
-            tcp_flags_list.append(total_incidents[i][j]['_source']['netflow']['tcp_flags'])
+    for i in range (0,len(total_flows)):
+        for j in range(0, len(total_flows[i])-1): #Para cada um dos flows
+            duration_list.append(total_flows[i][j]['_source']['netflow']['first_switched'])
+            pkts_list.append(total_flows[i][j]['_source']['netflow']['in_pkts'])
+            bytes_list.append(total_flows[i][j]['_source']['netflow']['in_bytes'])
+            dst_ports_list.append(total_flows[i][j]['_source']['netflow']['dst_port'])
+            tcp_flags_list.append(total_flows[i][j]['_source']['netflow']['tcp_flags'])
 
-        protocol_name = total_incidents[i][0]['_source']['netflow']['protocol']
+        protocol_name = total_flows[i][0]['_source']['netflow']['protocol']
         urg, ack, psh, rst, syn, fin = countTCPFlags(tcp_flags_list)
 
 
-        sec_incident.append(tuple((calcDuration(duration_list), len(total_incidents[i]), len(set(dst_ports_list)), translateProtocol(protocol_name),
+        sec_incident.append(tuple((calcDuration(duration_list), len(total_flows[i]), len(set(dst_ports_list)), translateProtocol(protocol_name),
                     getMinPkts(pkts_list), getMaxPkts(pkts_list), getMeanPkts(pkts_list), getStdPkts(pkts_list), getTotalPkts(pkts_list),
                     getMinBytes(bytes_list), getMaxBytes(bytes_list), getMeanBytes(bytes_list), getStdBytes(bytes_list), getTotalBytes(bytes_list),
-                    urg, ack, psh, rst, syn, fin, total_incidents[i][-1])))
+                    urg, ack, psh, rst, syn, fin, total_flows[i][-1])))
 
         del duration_list[:]
         del bytes_list[:]
         del pkts_list[:]
         del dst_ports_list[:]
         del tcp_flags_list[:]
-
-    del sec_incident[1::2]
 
     return sec_incident
