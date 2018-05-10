@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import csv
 
 def createCsv(sec_incident, start, end):

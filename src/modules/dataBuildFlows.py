@@ -1,4 +1,4 @@
-# Imnprimir bro_incidents, alltraffic_raw, total_incidents e verificar ligitmidade dos resultados
+#!/usr/bin/python3
 
 from .getElasticsearch.netflowGetFlows import GetFlows
 from .utils import *
@@ -17,18 +17,19 @@ def BuildFlows():
     total_incidents = list(itertools.chain(bro_incident, gplscan_raw,p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw))
     total_incidents = [x for x in total_incidents if x is not None] # Removendo valores None
 
+    pp.pprint(bro_incident)
 
     # Removendo de alltraffic_raw os mesmos fluxos que existem em total_incidents
-    #legittraffic = removeIncidents(alltraffic_raw, total_incidents)
+    legittraffic = removeIncidents(alltraffic_raw, total_incidents)
 
-    total_flows = list(itertools.chain(legittraffic, total_incidents)
+    total_flows = list(itertools.chain(legittraffic, total_incidents))
 
     sec_incident = []  # O lindissimo, falou tudo. O maravilhoso usado para classificar
                         # Seus campos maravilhosos:
-    # duracao(last.switched-first.switched), qtd_fluxos, unique_dst_port, protocol,
-    # in_pkts_min, in_pkts_max, in_pkts_mean, in_pkts_std, in_pkts_total,
-    # in_bytes_min, in_bytes_max, in_bytes_mean, in_bytes_std, in_bytes_total,
-    # qtd_urg, qtd_ack, qtd_psh, qtd_rst, qtd_syn, qtd_fin
+    #duracao(last.switched-first.switched), qtd_fluxos, unique_dst_port, protocol,
+    #in_pkts_min, in_pkts_max, in_pkts_mean, in_pkts_std, in_pkts_total,
+    #in_bytes_min, in_bytes_max, in_bytes_mean, in_bytes_std, in_bytes_total,
+    #qtd_urg, qtd_ack, qtd_psh, qtd_rst, qtd_syn, qtd_fin
     # input_snmp, output_snmp (nao implementado, porem easy de implementar)
     # tag (1 = address_scan, 2 = port_scan, 3 = ssh_passguess)
 
@@ -52,9 +53,9 @@ def BuildFlows():
 
 
         sec_incident.append(tuple((calcDuration(duration_list), len(total_flows[i]), len(set(dst_ports_list)), translateProtocol(protocol_name),
-                    getMinPkts(pkts_list), getMaxPkts(pkts_list), getMeanPkts(pkts_list), getStdPkts(pkts_list), getTotalPkts(pkts_list),
-                    getMinBytes(bytes_list), getMaxBytes(bytes_list), getMeanBytes(bytes_list), getStdBytes(bytes_list), getTotalBytes(bytes_list),
-                    urg, ack, psh, rst, syn, fin, total_flows[i][-1])))
+                   getMinPkts(pkts_list), getMaxPkts(pkts_list), getMeanPkts(pkts_list), getStdPkts(pkts_list), getTotalPkts(pkts_list),
+                   getMinBytes(bytes_list), getMaxBytes(bytes_list), getMeanBytes(bytes_list), getStdBytes(bytes_list), getTotalBytes(bytes_list),
+                   urg, ack, psh, rst, syn, fin, total_flows[i][-1])))
 
         del duration_list[:]
         del bytes_list[:]

@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from .elasticsearchConnect import *
 
 def SearchFlows (givenSRCAddr, givenSRCPort, givenDSTAddr, givenDSTPort, givenProtocol, time_gte, time_lte, client):

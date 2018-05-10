@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from requests import get
 from elasticsearch import Elasticsearch
 

@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from .elasticsearchConnect import *
 
 def SearchNotesAlerts(client, idsIndex, fieldIncident):

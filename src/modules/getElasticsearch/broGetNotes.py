@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from .searchNotesAlerts import SearchAllNotesAlerts
 
 def GetNotes():
