@@ -6,7 +6,6 @@ from .suricataGetAlerts import GetAlerts
 from .broGetNotes import GetNotes
 from .netflowSearchFlows import SearchAllFlows
 from itertools import groupby
-from operator import itemgetter
 
 def GetFlows():
     from ..dates import (start_time, end_time)
@@ -101,10 +100,10 @@ def GetFlows():
 
     all_traffic_flow = groupFlows(10)
 
-    return (address_scan_flow, port_scan_flow, ssh_passguess_flow, ssh_scan_flow, gpl_scan_flow, p2p_bittorrentping_flow, p2p_clientutorrent_flow, mssql_badtraffic_flow, all_traffic_flow)
+    return (address_scan_flow, port_scan_flow, ssh_passguess_flow, fin_storm_flow, ssh_scan_flow, gpl_scan_flow, p2p_bittorrentping_flow, p2p_clientutorrent_flow, mssql_badtraffic_flow, all_traffic_flow)
 
 def groupFlows(window):
-    from .dates import (start_time, end_time)
+    from ..dates import (start_time, end_time)
     allflows = []
     start_time = pd.to_datetime(start_time)
     end_time = pd.to_datetime(end_time)
@@ -120,7 +119,7 @@ def groupFlows(window):
             if flow['_source']['netflow']['src_addr'] == '200.145.216.136' or flow['_source']['netflow']['dst_addr'] == '200.145.216.136':
                 all_flows.remove(flow)
 
-        for key, items in itertools.groupby(sorted(all_flows, key=lambda item: (item["_source"]["netflow"]["src_addr"], item["_source"]["netflow"]["src_port"], item["_source"]["netflow"]["protocol"])), key=lambda item: (item["_source"]["netflow"]["src_addr"], item["_source"]["netflow"]["src_port"], item["_source"]["netflow"]["protocol"])):
+        for key, items in groupby(sorted(all_flows, key=lambda item: (item["_source"]["netflow"]["src_addr"], item["_source"]["netflow"]["src_port"], item["_source"]["netflow"]["protocol"])), key=lambda item: (item["_source"]["netflow"]["src_addr"], item["_source"]["netflow"]["src_port"], item["_source"]["netflow"]["protocol"])):
             allflows.append(list(items))
 
         start_interval = pd.to_datetime(start_interval) + pd.DateOffset(minutes=window)

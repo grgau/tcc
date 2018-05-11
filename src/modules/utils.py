@@ -3,6 +3,7 @@
 import numpy
 from datetime import datetime
 from .getElasticsearch.netflowGetFlows import GetFlows
+import itertools
 
 def calcDuration(duration_list): # Calcula a duração entre o fluxo mais antigo e o mais recente
 
@@ -102,8 +103,18 @@ def countTCPFlags(tcp_flags_list):
     return urg, ack, psh, rst, syn, fin
 
 def GetFlowsLabel():
+    ascan_raw, pscan_raw, spass_raw, sshscan_raw, fstorm_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, all_traffic_raw = GetFlows()
 
-    ascan_raw, pscan_raw, spass_raw, sshscan_raw, fstorm_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, legittraffic_raw = GetFlows()
+    bro_incident = list(itertools.chain(ascan_raw, pscan_raw, spass_raw, sshscan_raw, fstorm_raw))
+    bro_incident = [x for x in bro_incident if x is not None] # Removendo valores None
+    del bro_incident[1::2]  # Removendo valores de bro notes duplicados
+
+    total_incidents = list(itertools.chain(bro_incident, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw))
+
+    total_incidents = [x for x in total_incidents if x is not None] # Removendo valores None
+    all_traffic_raw = [x for x in all_traffic_raw if x is not None] # Removendo valores None
+
+    legittraffic = removeIncidents(all_traffic_raw, total_incidents)
 
     for index in ascan_raw:
         if index is not None:
@@ -141,14 +152,22 @@ def GetFlowsLabel():
         if index is not None:
             index.insert(len(index), 9)
 
-    for index in legittraffic_raw:
+    for index in legittraffic:
         if index is not None:
             index.insert(len(index), 10)
 
-    return (ascan_raw, pscan_raw, spass_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, all_traffic_raw)
+    import pprint
+    pp = pprint.PrettyPrinter(depth=4)
+    pp.pprint(legittraffic)
 
-def removeIncidents(legittraffic, total_incidents):
+    del bro_incident[:]
+    del total_incidents[:]
 
-    # Remover
+    return (ascan_raw, pscan_raw, spass_raw, fstorm_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, legittraffic)
+
+def removeIncidents(alltraffic_raw, total_incidents):
+
+    legittraffic = [x for x in total_incidents if x not in alltraffic_raw] + [x for x in alltraffic_raw if x not in total_incidents]
+    # Esta juntando alltraffic com total_incidents, criando total_incidents duplicados, se remover os duplicados ai vai dar certo de pegar só os legitimos
 
     return legittraffic
