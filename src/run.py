@@ -27,9 +27,9 @@ def main(argv):
     modules.dates.start_time = start
     modules.dates.end_time = end
 
-    incidents = BuildFlows()
+    dataToClassify = BuildFlows()
 
-    #createCsv(incidents, modules.dates.start_time, modules.dates.end_time) # Cria csv de incidentes
+    createCsv(dataToClassify, modules.dates.start_time, modules.dates.end_time) # Cria csv de incidentes
 
     return True
 

@@ -4,6 +4,8 @@ import numpy
 from datetime import datetime
 from .getElasticsearch.netflowGetFlows import GetFlows
 import itertools
+from copy import deepcopy
+
 
 def calcDuration(duration_list): # Calcula a duração entre o fluxo mais antigo e o mais recente
 
@@ -116,6 +118,12 @@ def GetFlowsLabel():
 
     legittraffic = removeIncidents(all_traffic_raw, total_incidents)
 
+    """import pprint
+    pp = pprint.PrettyPrinter(depth=4)
+    for l in all_traffic_raw:
+        for i in l:
+            pp.pprint(i['_id'])"""
+
     for index in ascan_raw:
         if index is not None:
             index.insert(len(index), 1)
@@ -156,18 +164,20 @@ def GetFlowsLabel():
         if index is not None:
             index.insert(len(index), 10)
 
-    import pprint
-    pp = pprint.PrettyPrinter(depth=4)
-    pp.pprint(legittraffic)
-
-    del bro_incident[:]
-    del total_incidents[:]
-
     return (ascan_raw, pscan_raw, spass_raw, fstorm_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, legittraffic)
 
 def removeIncidents(alltraffic_raw, total_incidents):
+    legittraffic = deepcopy(alltraffic_raw)
+    for listam2 in total_incidents:
+        for listam1 in legittraffic:
+            for i in range (len(listam1)):
+                value = [item for item in listam2 if item['_id'] == listam1[i]['_id']]
+                if value :
+                    listam1[i]['_id'] = ''
 
-    legittraffic = [x for x in total_incidents if x not in alltraffic_raw] + [x for x in alltraffic_raw if x not in total_incidents]
-    # Esta juntando alltraffic com total_incidents, criando total_incidents duplicados, se remover os duplicados ai vai dar certo de pegar só os legitimos
+    for lista in legittraffic:
+        lista[:] = [d for d in lista if d.get('_id') != '']
+
+    legittraffic = [x for x in legittraffic if x != []]
 
     return legittraffic

@@ -8,8 +8,18 @@ def BuildFlows():
     ascan_raw, pscan_raw, spass_raw, sshscan_raw, fstorm_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, legittraffic = GetFlowsLabel()
 
     total_flows = list(itertools.chain(ascan_raw, pscan_raw, spass_raw, sshscan_raw, fstorm_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, legittraffic))
-
+    total_flows = [x for x in total_flows if x is not None]
     # Removendo de alltraffic_raw os mesmos fluxos que existem em total_incidents
+
+    """import pprint
+    pp = pprint.PrettyPrinter(depth=4)
+    pp.pprint(total_flows)
+
+
+    for i in range (0,len(total_flows)):
+        for j in range(0, len(total_flows[i])-1): #Para cada um dos flows
+            print(len(total_flows[i]))
+    """
 
     sec_incident = []  # O lindissimo, falou tudo. O maravilhoso usado para classificar
                         # Seus campos maravilhosos:
@@ -27,7 +37,7 @@ def BuildFlows():
     tcp_flags_list = []
 
     # Append de atividades de address_scan
-    """for i in range (0,len(total_flows)):
+    for i in range (0,len(total_flows)):
         for j in range(0, len(total_flows[i])-1): #Para cada um dos flows
             duration_list.append(total_flows[i][j]['_source']['netflow']['first_switched'])
             pkts_list.append(total_flows[i][j]['_source']['netflow']['in_pkts'])
@@ -49,5 +59,5 @@ def BuildFlows():
         del pkts_list[:]
         del dst_ports_list[:]
         del tcp_flags_list[:]
-"""
+
     return sec_incident
