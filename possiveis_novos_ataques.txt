@@ -1,0 +1,5 @@
+ET WEB_SERVER Tilde in URI - potential .php~ source disclosure vulnerability
+ET DOS DNS Amplification Attack Inbound
+ET SCAN Tomcat Auth Brute Force attempt (admin) 
+ET SCAN ZmEu Scanner User-Agent Inbound
+

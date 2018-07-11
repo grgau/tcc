@@ -25,24 +25,26 @@ def GetFlows():
     legit_traffic_flow = []
 
     for scan in a_scan:
-        if scan[1] == '200.145.216.136' or scan[3] == '200.145.216.136':
+        if scan[1] == '200.145.216.136' or scan[2] == '200.145.216.136':
+            # t_ini,src,dst,port_dst,t_fim,proto
             None
         else:
             lte = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(int(scan[0])+60))
-            gte = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(int(scan[0]) - int(scan[3])))
-            address_scan_flow.append(SearchAllFlows(scan[1], '.*', '.*', scan[2], scan[4], gte, lte))
+            gte = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(int(scan[0]) - int(scan[4])))
+            address_scan_flow.append(SearchAllFlows(scan[1], '.*', '.*', scan[3], scan[5], gte, lte))
 
     for scan in p_scan:
-        if scan[1] == '200.145.216.136' or scan[3] == '200.145.216.136':
+        if scan[1] == '200.145.216.136' or scan[2] == '200.145.216.136':
+            # t_ini,src,dst,t_fim,proto
             None
         else:
             lte = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(int(scan[0])+60))
             gte = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(int(scan[0])-int(scan[3])-60))
             port_scan_flow.append(SearchAllFlows(scan[1], '.*', scan[2], '.*', '.*', gte, lte))
 
-
     for scan in s_passguess:
-        if scan[1] == '200.145.216.136' or scan[3] == '200.145.216.136':
+        if scan[1] == '200.145.216.136' or '200.145.216.136' in scan[2]:
+            # t_ini,src,port_dst,dst(list),proto
             None
         else:
             lte = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(int(scan[0])+60))
@@ -52,14 +54,16 @@ def GetFlows():
 
     for scan in f_storm:
         if scan[1] == '200.145.216.136' or scan[3] == '200.145.216.136':
+            # t_ini,src,port_src,dst,port_dst,proto
             None
         else:
             lte = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(int(scan[0])+60))
-            gte = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(int(scan[0])-int(scan[3])-60))
+            gte = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(int(scan[0])-60))
             fin_storm_flow.append(SearchAllFlows(scan[1], scan[2], scan[3], scan[4], scan[5], gte, lte))
 
     for scan in ssh_scan:
         if scan[1] == '200.145.216.136' or scan[3] == '200.145.216.136':
+            # t_ini,src,port_src,dst,port_dst,proto
             None
         else:
             lte = pd.to_datetime(scan[0]) + pd.DateOffset(minutes=1) # valor maximo
@@ -67,7 +71,8 @@ def GetFlows():
             ssh_scan_flow.append(SearchAllFlows(scan[1], scan[2], scan[3], scan[4], scan[5], gte, lte))
 
     for scan in gpl_scan:
-        if scan[1] == '200.145.216.136' or scan[3] == '200.145.216.136':
+        if scan[1] == '200.145.216.136' or scan[2] == '200.145.216.136':
+            # t_ini,src,dst,proto
             None
         else:
             lte = pd.to_datetime(scan[0]) + pd.DateOffset(minutes=1) # valor maximo
@@ -76,6 +81,7 @@ def GetFlows():
 
     for scan in p2p_bittorrentping:
         if scan[1] == '200.145.216.136' or scan[3] == '200.145.216.136':
+            # t_ini,src,port_src,dst,port_dst,proto
             None
         else:
             lte = pd.to_datetime(scan[0]) + pd.DateOffset(minutes=1) # valor maximo
@@ -84,6 +90,7 @@ def GetFlows():
 
     for scan in p2p_clientutorrent:
         if scan[1] == '200.145.216.136' or scan[3] == '200.145.216.136':
+            # t_ini,src,port_src,dst,port_dst,proto
             None
         else:
             lte = pd.to_datetime(scan[0]) + pd.DateOffset(minutes=1) # valor maximo
@@ -92,6 +99,7 @@ def GetFlows():
 
     for scan in mssql_badtraffic:
         if scan[1] == '200.145.216.136' or scan[3] == '200.145.216.136':
+            # t_ini,src,port_src,dst,port_dst,proto
             None
         else:
             lte = pd.to_datetime(scan[0]) + pd.DateOffset(minutes=1) # valor maximo

@@ -105,24 +105,26 @@ def countTCPFlags(tcp_flags_list):
     return urg, ack, psh, rst, syn, fin
 
 def GetFlowsLabel():
-    ascan_raw, pscan_raw, spass_raw, sshscan_raw, fstorm_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, all_traffic_raw = GetFlows()
+    ascan_raw, pscan_raw, spass_raw, fstorm_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, all_traffic_raw = GetFlows()
 
-    bro_incident = list(itertools.chain(ascan_raw, pscan_raw, spass_raw, sshscan_raw, fstorm_raw))
-    bro_incident = [x for x in bro_incident if x is not None] # Removendo valores None
-    del bro_incident[1::2]  # Removendo valores de bro notes duplicados
-
-    total_incidents = list(itertools.chain(bro_incident, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw))
-
-    total_incidents = [x for x in total_incidents if x is not None] # Removendo valores None
+    ascan_raw = [x for x in ascan_raw if x is not None] # Removendo valores None
+    pscan_raw = [x for x in pscan_raw if x is not None] # Removendo valores None
+    spass_raw = [x for x in spass_raw if x is not None] # Removendo valores None
+    fstorm_raw = [x for x in fstorm_raw if x is not None] # Removendo valores None
+    sshscan_raw = [x for x in sshscan_raw if x is not None] # Removendo valores None
+    gplscan_raw = [x for x in gplscan_raw if x is not None] # Removendo valores None
+    p2pbittorrentping_raw = [x for x in p2pbittorrentping_raw if x is not None] # Removendo valores None
+    p2pclientutorrent_raw = [x for x in p2pclientutorrent_raw if x is not None] # Removendo valores None
+    mssqlbadtraffic_raw = [x for x in mssqlbadtraffic_raw if x is not None] # Removendo valores None
     all_traffic_raw = [x for x in all_traffic_raw if x is not None] # Removendo valores None
 
-    legittraffic = removeIncidents(all_traffic_raw, total_incidents)
+    del ascan_raw[1::2] # Removendo valores de bro notes duplicados
+    del pscan_raw[1::2] # Removendo valores de bro notes duplicados
+    del spass_raw[1::2] # Removendo valores de bro notes duplicados
+    del fstorm_raw[1::2] # Removendo valores de bro notes duplicados
 
-    """import pprint
-    pp = pprint.PrettyPrinter(depth=4)
-    for l in all_traffic_raw:
-        for i in l:
-            pp.pprint(i['_id'])"""
+    total_incidents = list(itertools.chain(ascan_raw, pscan_raw, spass_raw, fstorm_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw))
+    legittraffic = removeIncidents(all_traffic_raw, total_incidents)
 
     for index in ascan_raw:
         if index is not None:
