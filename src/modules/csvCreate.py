@@ -3,8 +3,8 @@
 import csv
 
 def createCsv(sec_incident, start, end):
+    path = '../data/new/' + start.split('-',3)[1] + '/'
     name = "incidents__" + start + "_" + end + ".csv"
-    path = '../../data/new/' + start.split('-',3)[1] + '/'
 
     with open(path+name, "w") as csv_file:
         csv.register_dialect("custom", delimiter=",", skipinitialspace=True)
