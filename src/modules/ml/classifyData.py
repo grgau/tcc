@@ -57,8 +57,8 @@ def classify (dataset):
 	decisionTreeCL(df, 0.3, features)
 
 	# Limpa df da memória
-	#del df
-	#gc.collect()
+	del df
+	gc.collect()
 
 	##############################################################
 
