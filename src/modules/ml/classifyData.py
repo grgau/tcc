@@ -2,14 +2,14 @@
 import pandas as pd
 import gc
 
-from .algorithms.decisionTree import decisionTreeCL
-"""from .algorithms.naiveBayesGaussian import naiveBayesGaussianCL
-from .algorithms.naiveBayesMultinomial import naiveBayesMultinomialCL
-from .algorithms.randomForest import randomForestCL
+from .algorithms.trees import decisionTreeCL
+from .algorithms.trees import randomForestCL
+from .algorithms.naiveBayes import naiveBayesGaussianCL
+from .algorithms.naiveBayes import naiveBayesMultinomialCL
 from .algorithms.svm import svmLinearCL
 from .algorithms.svm import svmPolyCL
 from .algorithms.svm import svmRBFCL
-"""
+from .algorithms.knn import knnCL
 
 def readCSV (dataset):
     df = pd.read_csv(dataset, low_memory=False)
@@ -51,7 +51,7 @@ def preProcessing(dataset, duplicate):
 def classify (dataset):
 	df = preProcessing(dataset, 1)      # Com duplicatas
 	features = list(df.columns[:20])    # Define as colunas de features
-    
+
 	# Aplica algoritmos de classificacao
 	decisionTreeCL(df, 0.5, features)
 	decisionTreeCL(df, 0.3, features)
@@ -68,4 +68,3 @@ def classify (dataset):
     # Aplica algoritmos de classificacao
 	decisionTreeCL(df, 0.5, features)
 	decisionTreeCL(df, 0.3, features)
-
