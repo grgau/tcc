@@ -52,9 +52,22 @@ def classify (dataset):
 	df = preProcessing(dataset, 1)      # Com duplicatas
 	features = list(df.columns[:20])    # Define as colunas de features
 
+	print("\nCom duplicatas\n")
 	# Aplica algoritmos de classificacao
 	decisionTreeCL(df, 0.5, features)
 	decisionTreeCL(df, 0.3, features)
+	randomForestCL(df, 0.5, features)
+	randomForestCL(df, 0.3, features)
+	knnCL (df, 0.5, features)
+	knnCL (df, 0.3, features)
+	svmLinearCL(df, 0.5, features)
+	svmLinearCL(df, 0.3, features)
+	#svmPolyCL(df, 0.5, features)
+	#svmPolyCL(df, 0.3, features)	
+	#svmRBFCL(df, 0.5, features)
+	#svmRBFCL(df, 0.3, features)
+	naiveBayesGaussianCL(df, 0.5, features)
+	naiveBayesMultinomialCL(df, 0.3, features)
 
 	# Limpa df da memória
 	del df
@@ -65,6 +78,20 @@ def classify (dataset):
 	df = preProcessing(dataset, 0)      # Sem duplicatas
 	features = list(df.columns[:20])	# Define as colunas de features
 
+	print("\nSem duplicatas\n")
     # Aplica algoritmos de classificacao
 	decisionTreeCL(df, 0.5, features)
 	decisionTreeCL(df, 0.3, features)
+	randomForestCL(df, 0.5, features)
+	randomForestCL(df, 0.3, features)
+	knnCL (df, 0.5, features)
+	knnCL (df, 0.3, features)
+	svmLinearCL(df, 0.5, features)
+	svmLinearCL(df, 0.3, features)
+	#svmPolyCL(df, 0.5, features)
+	#svmPolyCL(df, 0.3, features)	
+	#svmRBFCL(df, 0.5, features)
+	#svmRBFCL(df, 0.3, features)
+	naiveBayesGaussianCL(df, 0.5, features)
+	naiveBayesMultinomialCL(df, 0.3, features)
+
