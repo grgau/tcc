@@ -5,21 +5,10 @@ from .utils import *
 from .csvCreate import createCsv
 
 def BuildFlows():
-    ascan_raw, pscan_raw, spass_raw, fstorm_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, legittraffic = GetFlowsLabel()
+    ascan_raw, pscan_raw, spass_raw, dnsflood_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, legittraffic = GetFlowsLabel()
 
-    total_flows = list(itertools.chain(ascan_raw, pscan_raw, spass_raw, fstorm_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, legittraffic))
+    total_flows = list(itertools.chain(ascan_raw, pscan_raw, spass_raw, dnsflood_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, legittraffic))
     total_flows = [x for x in total_flows if x is not None]
-    # Removendo de alltraffic_raw os mesmos fluxos que existem em total_incidents
-
-    """import pprint
-    pp = pprint.PrettyPrinter(depth=4)
-    pp.pprint(total_flows)
-
-
-    for i in range (0,len(total_flows)):
-        for j in range(0, len(total_flows[i])-1): #Para cada um dos flows
-            print(len(total_flows[i]))
-    """
 
     sec_incident = []  # O lindissimo, falou tudo. O maravilhoso usado para classificar
                         # Seus campos maravilhosos:

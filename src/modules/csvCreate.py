@@ -3,7 +3,7 @@
 import csv
 
 def createCsv(sec_incident, start, end):
-    path = '../data/new/' + start.split('-',3)[1] + '/'
+    path = '../data/teste/' + start.split('-',3)[1] + '/'
     name = "incidents__" + start + "_" + end + ".csv"
 
     with open(path+name, "w") as csv_file:

@@ -7,10 +7,9 @@ def GetNotes():
     address_scan = []
     port_scan = []
     ssh_passguess = []
-    fin_storm = []
 
     if not hits_total:
-        return (address_scan, port_scan, ssh_passguess, fin_storm)
+        return (address_scan, port_scan, ssh_passguess)
 
     for hit in hits_total:
         if hit['_source']['note'] == 'Scan::Address_Scan':
@@ -27,9 +26,5 @@ def GetNotes():
             dst_hosts = [host.replace(" ", "") for host in dst_hosts]
             dst_hosts = list(set(dst_hosts))
             ssh_passguess.append(tuple((hit['_source']['ts'].split('.',2)[0], hit['_source']['src'], '22', dst_hosts, 'TCP')))
-        elif hit['_source']['note'] == 'Weird::Activity':
-            port_src = hit['_source']['msg'].split('\t',6)[3]
-            port_dst = hit['_source']['msg'].split('\t',6)[5]
-            fin_storm.append(tuple((hit['_source']['ts'].split('.',2)[0], hit['_source']['src'], port_src, hit['_source']['dst'], port_dst, hit['_source']['proto'].upper())))
 
-    return (address_scan, port_scan, ssh_passguess, fin_storm)
+    return (address_scan, port_scan, ssh_passguess)

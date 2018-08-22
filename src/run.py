@@ -17,7 +17,7 @@ def main(argv):
 	dataset = '/home/pedroh/dataset_2018.csv'
 
 	try:
-		opts, args = getopt.getopt(argv,"hsec",["help","start=","end=","classify"])
+		opts, args = getopt.getopt(argv,"hs:e:c",["help","start=","end=","classify"])
 	except getopt.GetoptError:
 		print ("-s date\t\t: date in the format yyyy-mm-ddTHH:mm:ss.zzzZ \n-e date\t\t: date in the format yyyy-mm-ddTHH:mm:ss.zzzZ")
 		print ("\n\nEXAMPLES:\n\tpython3 run.py -s 2018-04-09T23:00:00.000Z -e 2018-04-09T23:05:00.000Z\n\tpython3 run.py --start=2018-04-09T23:00:00.000Z --end=2018-04-09T23:05:00.000Z\n\t python3 run.py -c\n\t python3 run.py --classify")
