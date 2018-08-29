@@ -57,8 +57,8 @@ def GetFlows():
             # t_ini,src,port_src,dst,port_dst,proto
             None
         else:
-            lte = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(int(scan[0])+60))
-            gte = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(int(scan[0])-60))
+            lte = pd.to_datetime(scan[0]) + pd.DateOffset(minutes=1) # valor maximo
+            gte = pd.to_datetime(scan[0]) - pd.DateOffset(minutes=1) # valor minimo
             dns_flood_flow.append(SearchAllFlows(scan[1], '.*', '.*', scan[4], scan[5], gte, lte))
 
     for scan in ssh_scan:

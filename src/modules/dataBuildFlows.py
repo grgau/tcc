@@ -49,4 +49,6 @@ def BuildFlows():
         del dst_ports_list[:]
         del tcp_flags_list[:]
 
+        print(dnsflood_raw)
+
     return sec_incident
