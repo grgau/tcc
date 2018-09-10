@@ -10,13 +10,13 @@ from itertools import groupby
 def GetFlows():
     from ..dates import (start_time, end_time)
 
-    a_scan, p_scan, s_passguess = GetNotes()
-    dns_flood, ssh_scan, gpl_scan, p2p_bittorrentping, p2p_clientutorrent, mssql_badtraffic = GetAlerts()
+    a_scan, p_scan, s_passguess, f_storm = GetNotes()
+    ssh_scan, gpl_scan, p2p_bittorrentping, p2p_clientutorrent, mssql_badtraffic = GetAlerts()
     all_flows = SearchAllFlows('.*', '.*', '.*', '.*', '.*', start_time, end_time)
     address_scan_flow = []
     port_scan_flow = []
     ssh_passguess_flow = []
-    dns_flood_flow = []
+    fin_storm_flow = []
     ssh_scan_flow = []
     gpl_scan_flow = []
     p2p_bittorrentping_flow = []
@@ -52,14 +52,15 @@ def GetFlows():
             for i in range(len(scan[3])):
                 ssh_passguess_flow.append(SearchAllFlows(scan[1], '.*', scan[3][i], scan[2], scan[4], gte, lte))
 
-    for scan in dns_flood:
+    for scan in f_storm:
         if scan[1] == '200.145.216.136' or scan[3] == '200.145.216.136':
             # t_ini,src,port_src,dst,port_dst,proto
             None
         else:
-            lte = pd.to_datetime(scan[0]) + pd.DateOffset(minutes=1) # valor maximo
-            gte = pd.to_datetime(scan[0]) - pd.DateOffset(minutes=1) # valor minimo
-            dns_flood_flow.append(SearchAllFlows(scan[1], '.*', '.*', scan[4], scan[5], gte, lte))
+            lte = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(int(scan[0])+60))
+            gte = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(int(scan[0])-60))
+            fin_storm_flow.append(SearchAllFlows(scan[1], scan[2], scan[3], scan[4], scan[5], gte, lte))
+
 
     for scan in ssh_scan:
         if scan[1] == '200.145.216.136' or scan[3] == '200.145.216.136':
@@ -108,7 +109,7 @@ def GetFlows():
 
     all_traffic_flow = groupFlows(10)
 
-    return (address_scan_flow, port_scan_flow, ssh_passguess_flow, dns_flood_flow, ssh_scan_flow, gpl_scan_flow, p2p_bittorrentping_flow, p2p_clientutorrent_flow, mssql_badtraffic_flow, all_traffic_flow)
+    return (address_scan_flow, port_scan_flow, ssh_passguess_flow, fin_storm_flow, ssh_scan_flow, gpl_scan_flow, p2p_bittorrentping_flow, p2p_clientutorrent_flow, mssql_badtraffic_flow, all_traffic_flow)
 
 def groupFlows(window):
     from ..dates import (start_time, end_time)
@@ -127,7 +128,7 @@ def groupFlows(window):
             if flow['_source']['netflow']['src_addr'] == '200.145.216.136' or flow['_source']['netflow']['dst_addr'] == '200.145.216.136':
                 all_flows.remove(flow)
 
-        for key, items in groupby(sorted(all_flows, key=lambda item: (item["_source"]["netflow"]["src_addr"], item["_source"]["netflow"]["src_port"], item["_source"]["netflow"]["protocol"])), key=lambda item: (item["_source"]["netflow"]["src_addr"], item["_source"]["netflow"]["src_port"], item["_source"]["netflow"]["protocol"])):
+        for key, items in groupby(sorted(all_flows, key=lambda item: (item["_source"]["netflow"]["src_addr"])), key=lambda item: (item["_source"]["netflow"]["src_addr"])):
             allflows.append(list(items))
 
         start_interval = pd.to_datetime(start_interval) + pd.DateOffset(minutes=window)

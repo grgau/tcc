@@ -105,12 +105,12 @@ def countTCPFlags(tcp_flags_list):
     return urg, ack, psh, rst, syn, fin
 
 def GetFlowsLabel():
-    ascan_raw, pscan_raw, spass_raw, dnsflood_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, all_traffic_raw = GetFlows()
+    ascan_raw, pscan_raw, spass_raw, fstorm_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, all_traffic_raw = GetFlows()
 
     ascan_raw = [x for x in ascan_raw if x is not None] # Removendo valores None
     pscan_raw = [x for x in pscan_raw if x is not None] # Removendo valores None
     spass_raw = [x for x in spass_raw if x is not None] # Removendo valores None
-    dnsflood_raw = [x for x in dnsflood_raw if x is not None] # Removendo valores None
+    fstorm_raw = [x for x in fstorm_raw if x is not None] # Removendo valores None
     sshscan_raw = [x for x in sshscan_raw if x is not None] # Removendo valores None
     gplscan_raw = [x for x in gplscan_raw if x is not None] # Removendo valores None
     p2pbittorrentping_raw = [x for x in p2pbittorrentping_raw if x is not None] # Removendo valores None
@@ -121,8 +121,9 @@ def GetFlowsLabel():
     del ascan_raw[1::2] # Removendo valores de bro notes duplicados
     del pscan_raw[1::2] # Removendo valores de bro notes duplicados
     del spass_raw[1::2] # Removendo valores de bro notes duplicados
+    del fstorm_raw[1::2] # Removendo valores de bro notes duplicados
 
-    total_incidents = list(itertools.chain(ascan_raw, pscan_raw, spass_raw, dnsflood_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw))
+    total_incidents = list(itertools.chain(ascan_raw, pscan_raw, spass_raw, fstorm_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw))
     legittraffic = removeIncidents(all_traffic_raw, total_incidents)
 
     for index in ascan_raw:
@@ -137,7 +138,7 @@ def GetFlowsLabel():
         if index is not None:
             index.insert(len(index), 3)
 
-    for index in dnsflood_raw:
+    for index in fstorm_raw:
         if index is not None:
             index.insert(len(index), 4)
 
@@ -165,7 +166,7 @@ def GetFlowsLabel():
         if index is not None:
             index.insert(len(index), 10)
 
-    return (ascan_raw, pscan_raw, spass_raw, dnsflood_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, legittraffic)
+    return (ascan_raw, pscan_raw, spass_raw, fstorm_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, legittraffic)
 
 def removeIncidents(alltraffic_raw, total_incidents):
     legittraffic = deepcopy(alltraffic_raw)
