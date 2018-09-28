@@ -105,7 +105,7 @@ def countTCPFlags(tcp_flags_list):
     return urg, ack, psh, rst, syn, fin
 
 def GetFlowsLabel():
-    ascan_raw, pscan_raw, spass_raw, fstorm_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, all_traffic_raw = GetFlows()
+    ascan_raw, pscan_raw, spass_raw, fstorm_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, dosntp_raw, all_traffic_raw = GetFlows()
 
     ascan_raw = [x for x in ascan_raw if x is not None] # Removendo valores None
     pscan_raw = [x for x in pscan_raw if x is not None] # Removendo valores None
@@ -116,6 +116,7 @@ def GetFlowsLabel():
     p2pbittorrentping_raw = [x for x in p2pbittorrentping_raw if x is not None] # Removendo valores None
     p2pclientutorrent_raw = [x for x in p2pclientutorrent_raw if x is not None] # Removendo valores None
     mssqlbadtraffic_raw = [x for x in mssqlbadtraffic_raw if x is not None] # Removendo valores None
+    dosntp_raw = [x for x in dosntp_raw if x is not None] # Removendo valores None
     all_traffic_raw = [x for x in all_traffic_raw if x is not None] # Removendo valores None
 
     del ascan_raw[1::2] # Removendo valores de bro notes duplicados
@@ -123,7 +124,7 @@ def GetFlowsLabel():
     del spass_raw[1::2] # Removendo valores de bro notes duplicados
     del fstorm_raw[1::2] # Removendo valores de bro notes duplicados
 
-    total_incidents = list(itertools.chain(ascan_raw, pscan_raw, spass_raw, fstorm_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw))
+    total_incidents = list(itertools.chain(ascan_raw, pscan_raw, spass_raw, fstorm_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, dosntp_raw))
     legittraffic = removeIncidents(all_traffic_raw, total_incidents)
 
     for index in ascan_raw:
@@ -162,11 +163,15 @@ def GetFlowsLabel():
         if index is not None:
             index.insert(len(index), 9)
 
-    for index in legittraffic:
+    for index in dosntp_raw:
         if index is not None:
             index.insert(len(index), 10)
 
-    return (ascan_raw, pscan_raw, spass_raw, fstorm_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, legittraffic)
+    for index in legittraffic:
+        if index is not None:
+            index.insert(len(index), 11)
+
+    return (ascan_raw, pscan_raw, spass_raw, fstorm_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, dosntp_raw, legittraffic)
 
 def removeIncidents(alltraffic_raw, total_incidents):
     legittraffic = deepcopy(alltraffic_raw)

@@ -5,9 +5,9 @@ from .utils import *
 from .csvCreate import createCsv
 
 def BuildFlows():
-    ascan_raw, pscan_raw, spass_raw, fstorm_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, legittraffic = GetFlowsLabel()
+    ascan_raw, pscan_raw, spass_raw, fstorm_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, dosntp_raw ,legittraffic = GetFlowsLabel()
 
-    total_flows = list(itertools.chain(ascan_raw, pscan_raw, spass_raw, fstorm_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, legittraffic))
+    total_flows = list(itertools.chain(ascan_raw, pscan_raw, spass_raw, fstorm_raw, sshscan_raw, gplscan_raw, p2pbittorrentping_raw, p2pclientutorrent_raw, mssqlbadtraffic_raw, dosntp_raw, legittraffic))
     total_flows = [x for x in total_flows if x is not None]
 
     sec_incident = []  # O lindissimo, falou tudo. O maravilhoso usado para classificar

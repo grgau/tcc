@@ -60,3 +60,13 @@ for d in {1..31}; do
   done
 done
 
+#Setembro
+for d in {1..30}; do
+  for h in {0..22}; do
+    hour_plus_one=$(printf %02d $(($h + 1)))
+    hour=$(printf %02d $(($h)))
+    day=$(printf %02d $(($d)))
+    echo "Building day $(date +"$day Sep %Y - $hour:00:00 to $hour_plus_one:00:00")..."; python3 ../src/run.py -s "$(date "+%Y-09-"$day"T"$hour":00:00.000Z")" -e "$(date "+%Y-09-"$day"T"$hour_plus_one":00:00.000Z")";
+  done
+done
+
